@@ -1,0 +1,21 @@
+name: 'Hello World Docker Action'
+description: 'Say hello to a user or the world.'
+inputs:
+  city:
+    description: 'The city to check the Weather'
+    required: true
+    default: 'Berlin'
+outputs:
+  weather:
+    description: 'The fetched weather.'
+    value: ${{ steps.weather.outputs.weather }}
+runs:
+  using: 'composite'
+  steps:
+    - id: weather
+      run: |
+        echo "Checking current weather in ${{ inputs.city }}"
+        weather=$(curl -s "wttr.in/${{ inputs.city }}?format=3" | tr '\n' ' ')
+        echo $weather
+        echo "weather=$weather" >> "$GITHUB_OUTPUT"
+      shell: bash

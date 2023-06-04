@@ -1,0 +1,32 @@
+name: CI Build for Custom Javascript Action
+on:
+  push:
+    branches: [ main ]
+    paths: [ custom-javascript-action/** ]
+  workflow_dispatch:
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.3.0
+
+      - name: Init javascript action
+        working-directory: ./custom-javascript-action
+        run: |
+          npm init -y
+          npm install @actions/core
+          npm install @actions/github
+          npm install node-fetch@2
+          npm i -g @vercel/ncc
+          ncc build index.js
+
+      - name: Run my own javascript action
+        id: weather-action
+        uses: ./custom-javascript-action
+        with:
+          city: 'Johannesburg'
+
+      - name: Output weather fetched in the javascript action
+        run: echo "${{ steps.weather-action.outputs.weather }}"

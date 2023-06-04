@@ -1,0 +1,15 @@
+name: 'Hello World Docker Action'
+description: 'Say hello to a user or the world.'
+inputs:
+  city:
+    description: 'The city to check the Weather'
+    required: true
+    default: 'Berlin'
+outputs:
+  weather:
+    description: 'The fetched weather.'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.city }}

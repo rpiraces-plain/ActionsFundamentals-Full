@@ -1,0 +1,22 @@
+name: CI Build for Custom Composite Action
+on:
+  push:
+    branches: [ main ]
+    paths: [ custom-composite-action/** ]
+  workflow_dispatch:
+
+jobs:
+  test-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.3.0
+
+      - name: Run my own composite action
+        id: weather-action
+        uses: ./custom-composite-action
+        with:
+          city: 'Johannesburg'
+
+      - name: Output weather fetched in the composite action
+        run: echo "${{ steps.weather-action.outputs.weather }}"
